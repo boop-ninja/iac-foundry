@@ -117,7 +117,7 @@ resource "kubernetes_deployment" "i" {
           }
 
           dynamic "env" {
-            for_each = tomap(var.additional_env_vars)
+            for_each = toset(var.additional_env_vars)
             content {
               name  = each.value["name"]
               value = each.value["value"]
