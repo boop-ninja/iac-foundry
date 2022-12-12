@@ -1,10 +1,6 @@
 locals {
   app_name_safe = "foundryvtt-${replace(replace(var.domain_name, "/", "-"), ".", "-")}"
   owner         = terraform.workspace
-  limits = {
-    cpu    = try(var.limits.cpu, "0.2")
-    memory = try(var.limits.memory, "1024Mi")
-  }
 }
 
 
