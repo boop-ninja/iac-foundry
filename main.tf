@@ -1,7 +1,7 @@
 locals {
   namespace = kubernetes_namespace.i.metadata[0].name
   common_labels = {
-    app = local.app_name_safe
+    app     = local.app_name_safe
     hosting = "foundry-vtt"
   }
   ports = {
@@ -20,6 +20,11 @@ locals {
       path = "/foundrydata"
       size = "10Gi"
     }
+    foundry_app = {
+      name = "foundry-app"
+      path = "/foundryvtt"
+      size = "2Gi"
+    }
   }
 }
 
@@ -33,7 +38,7 @@ resource "kubernetes_namespace" "i" {
 resource "kubernetes_persistent_volume_claim" "o" {
   depends_on = [kubernetes_namespace.i]
   metadata {
-    name = local.app_name_safe
+    name      = local.app_name_safe
     namespace = local.namespace
     labels    = local.common_labels
   }
@@ -51,10 +56,31 @@ resource "kubernetes_persistent_volume_claim" "o" {
   }
 }
 
+resource "kubernetes_persistent_volume_claim" "i" {
+  depends_on = [kubernetes_namespace.i]
+  metadata {
+    name      = "${local.app_name_safe}-app"
+    namespace = local.namespace
+    labels    = local.common_labels
+  }
+  spec {
+    storage_class_name = "longhorn"
+    access_modes       = ["ReadWriteOnce"]
+    resources {
+      requests = {
+        storage = local.volumes.foundry_app.size
+      }
+      limits = {
+        storage = local.volumes.foundry_app.size
+      }
+    }
+  }
+}
+
 resource "kubernetes_deployment" "i" {
   depends_on = [kubernetes_namespace.i]
   metadata {
-    name = local.app_name_safe
+    name      = local.app_name_safe
     namespace = local.namespace
     labels    = local.common_labels
   }
@@ -69,32 +95,35 @@ resource "kubernetes_deployment" "i" {
         labels    = local.common_labels
       }
       spec {
-        volume {
-          name = local.volumes.foundry_data.name
-          persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.o.metadata[0].name
-          }
-        }
         container {
-          image = "mbround18/foundryvtt-docker:latest"
+          image = var.image
           name  = local.app_name_safe
 
           resources {
             limits = {
               cpu    = "0.2"
-              memory = "512Mi"
+              memory = "1024Mi"
             }
           }
 
           env {
             name  = "HOSTNAME"
-            value = local.domain_name
+            value = var.domain_name
           }
 
           env {
             name  = "SSL_PROXY"
             value = "false"
           }
+
+          dynamic "env" {
+            for_each = var.additional_env_vars
+            content {
+              name  = each.key
+              value = each.value
+            }
+          }
+
 
           port {
             name           = local.ports.web.name
@@ -105,10 +134,28 @@ resource "kubernetes_deployment" "i" {
             mount_path = local.volumes.foundry_data.path
             name       = local.volumes.foundry_data.name
           }
+
+          volume_mount {
+            mount_path = local.volumes.foundry_app.path
+            name       = local.volumes.foundry_app.name
+          }
+        }
+
+        volume {
+          name = local.volumes.foundry_data.name
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.o.metadata[0].name
+          }
+        }
+        volume {
+          name = local.volumes.foundry_app.name
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.i.metadata[0].name
+          }
         }
 
         container {
-          name = "${local.app_name_safe}-syncthing"
+          name  = "${local.app_name_safe}-syncthing"
           image = "syncthing/syncthing:latest"
 
           env {
@@ -126,23 +173,23 @@ resource "kubernetes_deployment" "i" {
           }
 
           port {
-            name = local.ports.syncthing.name
+            name           = local.ports.syncthing.name
             container_port = local.ports.syncthing.port
           }
 
           port {
-            name = "sync"
+            name           = "sync"
             container_port = 22000
           }
 
           volume_mount {
-            name = local.volumes.foundry_data.name
-            sub_path = "syncthing-config"
+            name       = local.volumes.foundry_data.name
+            sub_path   = "syncthing-config"
             mount_path = "/var/syncthing/config"
           }
 
           volume_mount {
-            name = local.volumes.foundry_data.name
+            name       = local.volumes.foundry_data.name
             mount_path = "/var/syncthing${local.volumes.foundry_data.path}"
           }
 
