@@ -121,7 +121,7 @@ resource "kubernetes_deployment" "i" {
           }
 
           dynamic "env" {
-            for_each = var.additional_env_vars != null ? var.additional_env_vars : {}
+            for_each = toset(var.additional_env_vars)
             content {
               name  = each.key
               value = each.value

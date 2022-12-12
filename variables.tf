@@ -39,7 +39,7 @@ variable "image_pull_secrets" {
 variable "additional_env_vars" {
   type      = object({})
   sensitive = false
-  default = null
+  default = {}
   description = "description"
 }
 
