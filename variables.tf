@@ -36,6 +36,18 @@ variable "image_pull_secrets" {
   description = "Secret Names for image puller secrets"
 }
 
+variable "limits" {
+  type    = object({})
+  default = {}
+}
+
+locals {
+  limits = merge({
+    cpu    = "0.2"
+    memory = "1024Mi"
+  }, var.limits)
+}
+
 variable "additional_env_vars" {
   type        = object({})
   sensitive   = false
