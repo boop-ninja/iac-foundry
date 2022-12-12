@@ -131,15 +131,6 @@ resource "kubernetes_deployment" "i" {
             }
           }
 
-          # dynamic "env" {
-          #   for_each = toset(var.additional_env_vars)
-          #   content {
-          #     name  = each.value["name"]
-          #     value = each.value["value"]
-          #   }
-          # }
-
-
           port {
             name           = local.ports.web.name
             container_port = local.ports.web.port
