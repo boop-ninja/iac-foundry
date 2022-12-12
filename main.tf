@@ -121,6 +121,7 @@ resource "kubernetes_deployment" "i" {
             content {
               name  = each.key
               value = each.value
+            }
           }
 
 
