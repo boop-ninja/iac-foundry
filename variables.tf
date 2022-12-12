@@ -3,7 +3,6 @@ locals {
   owner         = terraform.workspace
 }
 
-
 variable "app_name" {
   type        = string
   default     = ""
@@ -13,8 +12,6 @@ variable "app_name" {
 variable "domain_name" {
   type = string
 }
-
-
 
 variable "image" {
   type        = string
@@ -28,8 +25,11 @@ variable "image_pull_secrets" {
 }
 
 variable "limits" {
-  type    = object({})
-  default = {}
+  type = object({})
+  default = {
+    cpu    = "0.3"
+    memory = "1024Mi"
+  }
 }
 
 variable "additional_env_vars" {
@@ -37,9 +37,4 @@ variable "additional_env_vars" {
   sensitive   = false
   default     = {}
   description = "description"
-}
-
-
-output "domain" {
-  value = "https://${var.domain_name}"
 }
