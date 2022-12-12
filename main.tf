@@ -79,7 +79,7 @@ resource "kubernetes_persistent_volume_claim" "i" {
 
 resource "kubernetes_config_map" "i" {
   metadata {
-    name      = "additional-env"
+    name      = "${local.app_name_safe}-additional-env"
     namespace = kubernetes_namespace.i.metadata[0].name
   }
 
