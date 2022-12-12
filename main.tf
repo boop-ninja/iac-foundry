@@ -77,6 +77,15 @@ resource "kubernetes_persistent_volume_claim" "i" {
   }
 }
 
+resource "kubernetes_config_map" "i" {
+  metadata {
+    name      = "additional-env"
+    namespace = kubernetes_namespace.i.metadata[0].name
+  }
+
+  data = var.additional_env_vars
+}
+
 resource "kubernetes_deployment" "i" {
   depends_on = [kubernetes_namespace.i]
   metadata {
@@ -116,13 +125,19 @@ resource "kubernetes_deployment" "i" {
             value = "false"
           }
 
-          dynamic "env" {
-            for_each = toset(var.additional_env_vars)
-            content {
-              name  = each.value["name"]
-              value = each.value["value"]
+          env_from {
+            config_map_ref {
+              name = kubernetes_config_map.i.metadata[0].name
             }
           }
+
+          # dynamic "env" {
+          #   for_each = toset(var.additional_env_vars)
+          #   content {
+          #     name  = each.value["name"]
+          #     value = each.value["value"]
+          #   }
+          # }
 
 
           port {
