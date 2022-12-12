@@ -22,12 +22,7 @@ variable "domain_name" {
 locals {
   app_name_safe = "foundryvtt-${replace(replace(var.domain_name, "/", "-"), ".", "-")}"
   owner         = terraform.workspace
-  additional_env_vars = [
-    for key, value in nonsensitive(var.additional_env_vars) : {
-      name  = key
-      value = value
-    }
-  ]
+
 }
 
 variable "image" {
@@ -43,8 +38,8 @@ variable "image_pull_secrets" {
 
 variable "additional_env_vars" {
   type      = object({})
-  sensitive = true
-  default = {}
+  sensitive = false
+  default = null
   description = "description"
 }
 
