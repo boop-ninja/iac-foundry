@@ -1,13 +1,12 @@
-variable "kube_host" {
+locals {
+  app_name_safe = "foundryvtt-${replace(replace(var.domain_name, "/", "-"), ".", "-")}"
+  owner         = terraform.workspace
+  limits = {
+    cpu    = try(var.limits.cpu, "0.2")
+    memory = try(var.limits.memory, "1024Mi")
+  }
 }
 
-variable "kube_crt" {
-  default = ""
-}
-
-variable "kube_key" {
-  default = ""
-}
 
 variable "app_name" {
   type        = string
@@ -19,11 +18,7 @@ variable "domain_name" {
   type = string
 }
 
-locals {
-  app_name_safe = "foundryvtt-${replace(replace(var.domain_name, "/", "-"), ".", "-")}"
-  owner         = terraform.workspace
 
-}
 
 variable "image" {
   type        = string
@@ -39,13 +34,6 @@ variable "image_pull_secrets" {
 variable "limits" {
   type    = object({})
   default = {}
-}
-
-locals {
-  limits = merge({
-    cpu    = "0.2"
-    memory = "1024Mi"
-  }, var.limits)
 }
 
 variable "additional_env_vars" {
