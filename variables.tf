@@ -24,7 +24,7 @@ variable "image_pull_secrets" {
   description = "Secret Names for image puller secrets"
 }
 
-variable "deployemnt_limits" {
+variable "deployment_limits" {
   type = object({})
   default = {
     cpu    = "0.3"
