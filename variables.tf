@@ -37,9 +37,9 @@ variable "image_pull_secrets" {
 }
 
 variable "additional_env_vars" {
-  type      = map(object({}))
+  type      = list(object({}))
   sensitive = false
-  default = {}
+  default = []
   description = "description"
 }
 
