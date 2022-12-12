@@ -117,12 +117,12 @@ resource "kubernetes_deployment" "i" {
           }
 
           dynamic "env" {
-            for_each = [
-              for key, value in var.additional_env_vars :  {
+            for_each = ([
+              for key, value in var.additional_env_vars : {
                 name = key
                 value = value
               }
-            ] 
+            ])
             content {
               name  = each.key
               value = each.value.value
