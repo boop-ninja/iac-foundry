@@ -110,8 +110,8 @@ resource "kubernetes_deployment" "i" {
 
           resources {
             limits = {
-              cpu    = try(var.limits["cpu"], "0.3")
-              memory = try(var.limits["memory"], "1024Mi")
+              cpu    = var.deployment_limits["cpu"]
+              memory = var.deployment_limits["memory"]
             }
           }
 
