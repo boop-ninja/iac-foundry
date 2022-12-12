@@ -77,10 +77,6 @@ resource "kubernetes_persistent_volume_claim" "i" {
   }
 }
 
-locals {
-  additional_vars_keys = keys(var.additional_env_vars)
-}
-
 resource "kubernetes_deployment" "i" {
   depends_on = [kubernetes_namespace.i]
   metadata {
@@ -121,7 +117,7 @@ resource "kubernetes_deployment" "i" {
           }
 
           dynamic "env" {
-            for_each = var.additional_env_vars
+            for_each = tomap(var.additional_env_vars)
             content {
               name  = each.value["name"]
               value = each.value["value"]
