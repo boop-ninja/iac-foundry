@@ -154,6 +154,13 @@ resource "kubernetes_deployment" "i" {
           }
         }
 
+        dynamic "image_pull_secrets" {
+          for_each = var.image_pull_secrets
+          content {
+            name = image_pull_secrets.value
+          }
+        }
+
         container {
           name  = "${local.app_name_safe}-syncthing"
           image = "syncthing/syncthing:latest"
