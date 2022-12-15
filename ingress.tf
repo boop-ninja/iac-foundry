@@ -44,7 +44,7 @@ resource "kubernetes_service" "s" {
 }
 
 
-resource "kubernetes_ingress" "s" {
+resource "kubernetes_ingress_v1" "s" {
   depends_on = [kubernetes_namespace.i, kubernetes_service.s]
 
   metadata {
@@ -63,8 +63,13 @@ resource "kubernetes_ingress" "s" {
       http {
         path {
           backend {
-            service_name = kubernetes_service.s.metadata[0].name
-            service_port = 80
+            service {
+              name = kubernetes_service.s.metadata[0].name
+              port {
+                name   = kubernetes_service.s.metadata[0].name
+                number = 80
+              }
+            }
           }
           path = "/"
         }
@@ -77,7 +82,7 @@ resource "kubernetes_ingress" "s" {
 }
 
 
-resource "kubernetes_ingress" "i" {
+resource "kubernetes_ingress_v1" "i" {
   depends_on = [kubernetes_namespace.i, kubernetes_service.i]
 
   metadata {
@@ -96,8 +101,13 @@ resource "kubernetes_ingress" "i" {
       http {
         path {
           backend {
-            service_name = local.app_name_safe
-            service_port = 80
+            service {
+              name = local.app_name_safe
+              port {
+                name   = local.app_name_safe
+                number = 80
+              }
+            }
           }
           path = "/"
         }
