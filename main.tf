@@ -84,7 +84,7 @@ resource "kubernetes_config_map" "i" {
   }
 
   data = merge(var.additional_env_vars, {
-    HOSTNAME = var.domain_name
+    HOSTNAME  = var.domain_name
     SSL_PROXY = "false"
   })
 }

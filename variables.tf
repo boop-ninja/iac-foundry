@@ -36,7 +36,7 @@ variable "deployment_limits" {
 }
 
 variable "additional_env_vars" {
-  type        = object({})
+  type        = map(string)
   sensitive   = false
   default     = {}
   description = "description"
