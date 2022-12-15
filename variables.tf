@@ -26,7 +26,7 @@ variable "image_pull_secrets" {
 
 variable "deployment_limits" {
   type = object({
-    cpu = string
+    cpu    = string
     memory = string
   })
   default = {

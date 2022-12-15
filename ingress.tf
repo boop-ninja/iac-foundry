@@ -1,11 +1,11 @@
 resource "kubernetes_service" "i" {
   metadata {
-    name   = local.app_name_safe
+    name      = local.app_name_safe
     namespace = local.namespace
-    labels = local.common_labels
+    labels    = local.common_labels
     annotations = {
-      "traefik.ingress.kubernetes.io/service.passhostheader" = "true"
-      "traefik.ingress.kubernetes.io/service.sticky.cookie" =  "true"
+      "traefik.ingress.kubernetes.io/service.passhostheader"       = "true"
+      "traefik.ingress.kubernetes.io/service.sticky.cookie"        = "true"
       "traefik.ingress.kubernetes.io/service.sticky.cookie.secure" = "true"
     }
   }
@@ -25,9 +25,9 @@ resource "kubernetes_service" "i" {
 
 resource "kubernetes_service" "s" {
   metadata {
-    name   = "${local.app_name_safe}-syncthing"
+    name      = "${local.app_name_safe}-syncthing"
     namespace = local.namespace
-    labels = local.common_labels
+    labels    = local.common_labels
   }
   spec {
     selector         = local.common_labels
@@ -53,7 +53,7 @@ resource "kubernetes_ingress" "s" {
     labels    = local.common_labels
     annotations = {
       "cert-manager.io/cluster-issuer" = "boop-ninja"
-      "kubernetes.io/ingress.class" = "traefik"
+      "kubernetes.io/ingress.class"    = "traefik"
     }
   }
 
@@ -86,7 +86,7 @@ resource "kubernetes_ingress" "i" {
     labels    = local.common_labels
     annotations = {
       "cert-manager.io/cluster-issuer" = "boop-ninja"
-      "kubernetes.io/ingress.class" = "traefik"
+      "kubernetes.io/ingress.class"    = "traefik"
     }
   }
 

@@ -2,7 +2,7 @@
 
 Deploy Foundry to a Kubernetes Cluster
 
-## Instuctions
+## Instructions
 
 1. Clone the repo `git clone git@github.com:boop-ninja/iac-foundry.git`
 2. Create a `terraform.tfvars.json` file
