@@ -44,6 +44,11 @@ resource "kubernetes_service" "s" {
 }
 
 
+locals {
+  domain_name_syncthing = replace(var.domain_name, "/^([[:alnum:]-]+).([[:alnum:]-]+.[[:alnum:]-]+)$/", "$1-admin.$2")
+}
+
+
 resource "kubernetes_ingress_v1" "s" {
   depends_on = [kubernetes_namespace.i, kubernetes_service.s]
 
@@ -59,7 +64,7 @@ resource "kubernetes_ingress_v1" "s" {
 
   spec {
     rule {
-      host = replace(var.domain_name, "/^([[:alnum:]-]+).([[:alnum:]-]+.[[:alnum:]-]+)$/", "$1-admin.$2")
+      host = local.domain_name_syncthing
       http {
         path {
           backend {
@@ -75,7 +80,7 @@ resource "kubernetes_ingress_v1" "s" {
       }
     }
     tls {
-      hosts = [var.domain_name]
+      hosts = [local.domain_name_syncthing]
       secret_name = "${local.app_name_safe}-s-tls"
     }
   }
