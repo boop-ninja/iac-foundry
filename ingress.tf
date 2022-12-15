@@ -75,6 +75,7 @@ resource "kubernetes_ingress_v1" "s" {
       }
     }
     tls {
+      hosts = [var.domain_name]
       secret_name = "${local.app_name_safe}-s-tls"
     }
   }
@@ -112,6 +113,7 @@ resource "kubernetes_ingress_v1" "i" {
       }
     }
     tls {
+      hosts = [var.domain_name]
       secret_name = "${local.app_name_safe}-i-tls"
     }
   }
