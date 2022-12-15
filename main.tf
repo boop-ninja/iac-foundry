@@ -83,7 +83,10 @@ resource "kubernetes_config_map" "i" {
     namespace = kubernetes_namespace.i.metadata[0].name
   }
 
-  data = var.additional_env_vars
+  data = merge(var.additional_env_vars, {
+    HOSTNAME = var.domain_name
+    SSL_PROXY = "false"
+  })
 }
 
 resource "kubernetes_deployment" "i" {
@@ -113,16 +116,6 @@ resource "kubernetes_deployment" "i" {
               cpu    = var.deployment_limits["cpu"]
               memory = var.deployment_limits["memory"]
             }
-          }
-
-          env {
-            name  = "HOSTNAME"
-            value = var.domain_name
-          }
-
-          env {
-            name  = "SSL_PROXY"
-            value = "false"
           }
 
           env_from {

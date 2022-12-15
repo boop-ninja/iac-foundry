@@ -71,7 +71,7 @@ resource "kubernetes_ingress_v1" "s" {
             service {
               name = kubernetes_service.s.metadata[0].name
               port {
-                name = "syncthing"
+                name = local.ports.syncthing.name
               }
             }
           }
@@ -109,7 +109,7 @@ resource "kubernetes_ingress_v1" "i" {
             service {
               name = local.app_name_safe
               port {
-                name = "web"
+                name = local.ports.web.name
               }
             }
           }
