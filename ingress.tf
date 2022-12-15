@@ -66,7 +66,6 @@ resource "kubernetes_ingress_v1" "s" {
             service {
               name = kubernetes_service.s.metadata[0].name
               port {
-                name   = kubernetes_service.s.metadata[0].name
                 number = 80
               }
             }
@@ -104,7 +103,6 @@ resource "kubernetes_ingress_v1" "i" {
             service {
               name = local.app_name_safe
               port {
-                name   = local.app_name_safe
                 number = 80
               }
             }
