@@ -107,6 +107,28 @@ resource "kubernetes_deployment" "i" {
         labels    = local.common_labels
       }
       spec {
+        init_container {
+          name  = "${local.app_name_safe}-init"
+          image = "busybox:latest"
+
+          command = [
+            "sh",
+            "-c",
+            "chown 1000:1000 /var/syncthing"
+          ]
+
+          volume_mount {
+            name       = local.volumes.foundry_data.name
+            sub_path   = "syncthing-config"
+            mount_path = "/var/syncthing/config"
+          }
+
+          volume_mount {
+            name       = local.volumes.foundry_data.name
+            mount_path = "/var/syncthing${local.volumes.foundry_data.path}"
+          }
+        }
+
         container {
           image = var.image
           name  = local.app_name_safe
@@ -161,6 +183,8 @@ resource "kubernetes_deployment" "i" {
         }
 
         container {
+
+
           name  = "${local.app_name_safe}-syncthing"
           image = "syncthing/syncthing:latest"
 
