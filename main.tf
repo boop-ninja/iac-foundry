@@ -114,7 +114,7 @@ resource "kubernetes_deployment" "i" {
           command = [
             "sh",
             "-c",
-            "chown 1000:1000 /var/syncthing"
+            "chown -R 1000:1000 /var/syncthing"
           ]
 
           volume_mount {
