@@ -232,7 +232,7 @@ resource "kubernetes_deployment" "i" {
 
 resource "helm_release" "dnd_beyond_rolls" {
   depends_on = [kubernetes_namespace.i]
-  count = var.foundry_modules.dnd_beyond_rolls ? [1] : []
+  count = var.foundry_modules.dnd_beyond_rolls ? 1 : 0
   chart = "fvtt-dndbeyond-companion"
   repository = "https://mbround18.github.io/helm-charts/"
   name  = "${local.app_name_safe}-dndbeyond-rolls"
