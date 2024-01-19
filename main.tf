@@ -229,3 +229,39 @@ resource "kubernetes_deployment" "i" {
     }
   }
 }
+
+resource "helm_release" "dnd_beyond_rolls" {
+  depends_on = [kubernetes_namespace.i]
+  for_each = var.foundry_modules.dnd_beyond_rolls ? [1] : []
+  chart = "fvtt-dndbeyond-companion"
+  repository = "https://mbround18.github.io/helm-charts/"
+  name  = "${local.app_name_safe}-dndbeyond-rolls"
+  namespace = local.namespace
+
+  set {
+      name  = "ingress.enabled"
+      value = "true"
+  }
+
+  set {
+      name  = "ingress.hosts[0].host"
+      value = var.domain_name
+  }
+
+  set {
+      name  = "ingress.hosts[0].paths[0].path"
+      value = "/dndbeyond-rolls"
+  }
+
+  set {
+    name  = "ingress.tls[0].secretName"
+    value = "${local.app_name_safe}-dnd-beyond-rolls-tls"
+  }
+
+  set {
+    name  = "ingress.tls[0].hosts[0]"
+    value = var.domain_name
+  }
+}
+
+

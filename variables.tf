@@ -41,3 +41,13 @@ variable "additional_env_vars" {
   default     = {}
   description = "description"
 }
+
+variable "foundry_modules" {
+  type        = object({ dnd_beyond_rolls = bool })
+  default     = {
+    dnd_beyond_rolls = false
+  }
+  description = "description"
+}
+
+
