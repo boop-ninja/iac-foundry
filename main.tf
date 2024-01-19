@@ -43,7 +43,7 @@ resource "kubernetes_persistent_volume_claim" "o" {
     labels    = local.common_labels
   }
   spec {
-    storage_class_name = "longhorn"
+    storage_class_name = "longhorn-static"
     access_modes       = ["ReadWriteOnce"]
     resources {
       requests = {
@@ -64,7 +64,7 @@ resource "kubernetes_persistent_volume_claim" "i" {
     labels    = local.common_labels
   }
   spec {
-    storage_class_name = "longhorn"
+    storage_class_name = "longhorn-static"
     access_modes       = ["ReadWriteOnce"]
     resources {
       requests = {
