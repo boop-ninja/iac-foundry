@@ -5,7 +5,7 @@ locals {
 
   volume_mounts = [
     {
-      name       = "foundry_app"
+      name       = "foundry-app"
       mount_path = "/foundryvtt"
       sub_path   = ""
     },
