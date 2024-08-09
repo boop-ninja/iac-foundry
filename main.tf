@@ -178,7 +178,7 @@ resource "kubernetes_deployment" "i" {
         volume {
           name = "syncthing"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.syncthing.metadata[0].name
+            claim_name = kubernetes_persistent_volume_claim.syncthing[0].metadata[0].name
           }
         }
 
