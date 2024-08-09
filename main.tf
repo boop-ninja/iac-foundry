@@ -94,6 +94,26 @@ resource "kubernetes_deployment" "i" {
           }
         }
 
+        init_container {
+          name  = "${local.app_name_safe}-init-busybox"
+          image = "busybox:latest"
+
+          command = [
+            "sh",
+            "-c",
+            "chown -R 1000:1000 /foundrydata"
+          ]
+
+          dynamic "volume_mount" {
+            for_each = local.volume_mounts
+            content {
+              name       = volume_mount.value.name
+              mount_path = volume_mount.value.mount_path
+              sub_path   = volume_mount.value.sub_path != "" ? volume_mount.value.sub_path : null
+            }
+          }
+        }
+
         container {
           image = var.image
           name  = local.app_name_safe
