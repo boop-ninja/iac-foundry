@@ -8,7 +8,7 @@ resource "kubernetes_persistent_volume_claim" "backups" {
   }
   spec {
     storage_class_name = var.storage_class_name
-    access_modes       = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteMany"]
     resources {
       requests = {
         storage = var.pvc_storage_sizes["backups"]
@@ -44,7 +44,7 @@ resource "kubernetes_persistent_volume_claim" "data" {
   }
   spec {
     storage_class_name = var.storage_class_name
-    access_modes       = ["ReadWriteOnce"]
+    access_modes       = ["ReadWriteMany"]
     resources {
       requests = {
         storage = var.pvc_storage_sizes["data"]
