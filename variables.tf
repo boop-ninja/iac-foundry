@@ -43,11 +43,34 @@ variable "additional_env_vars" {
 }
 
 variable "foundry_modules" {
-  type        = object({ dnd_beyond_rolls = bool })
-  default     = {
+  description = "Configuration for Foundry modules"
+  type = object({
+    syncthing        = bool
+    dnd_beyond_rolls = bool
+  })
+  default = {
+    syncthing        = false
     dnd_beyond_rolls = false
   }
-  description = "description"
 }
 
+variable "pvc_storage_sizes" {
+  description = "Storage sizes for PVCs"
+  type        = map(string)
+  default = {
+    backups          = "10Gi"
+    config           = "1Gi"
+    data             = "20Gi"
+    core             = "2Gi"
+    moradin          = "1Gi"
+    syncthing_config = "500Mi"
+    foundry_app      = "4Gi"
+  }
+}
+
+variable "storage_class_name" {
+  description = "The storage class to be used for PVCs"
+  type        = string
+  default     = "longhorn"
+}
 
