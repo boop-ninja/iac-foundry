@@ -7,26 +7,31 @@ locals {
     {
       name       = "app"
       mount_path = "/foundryvtt"
+      claim_name = kubernetes_persistent_volume_claim.app.metadata[0].name
       sub_path   = ""
     },
     {
       name       = "core"
       mount_path = "/foundrydata/"
+      claim_name = kubernetes_persistent_volume_claim.core.metadata[0].name
       sub_path   = ""
     },
     {
       name       = "backups"
       mount_path = "/foundrydata/Backups"
+      claim_name = kubernetes_persistent_volume_claim.backups.metadata[0].name
       sub_path   = ""
     },
     {
       name       = "config"
       mount_path = "/foundrydata/Config"
+      claim_name = kubernetes_persistent_volume_claim.config.metadata[0].name
       sub_path   = ""
     },
     {
       name       = "data"
       mount_path = "/foundrydata/Data"
+      claim_name = kubernetes_persistent_volume_claim.data.metadata[0].name
       sub_path   = ""
     }
   ]
@@ -193,7 +198,8 @@ resource "kubernetes_deployment" "i" {
           content {
             name = volume.value.name
             persistent_volume_claim {
-              claim_name = "kubernetes_persistent_volume_claim.${volume.value.name}.metadata[0].name"
+              claim_name = volume.value.claim_name
+
             }
           }
         }
