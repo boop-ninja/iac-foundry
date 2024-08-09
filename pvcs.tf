@@ -90,7 +90,7 @@ resource "kubernetes_persistent_volume_claim" "moradin" {
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "syncthing_config" {
+resource "kubernetes_persistent_volume_claim" "syncthing" {
   depends_on = [kubernetes_namespace.i]
   metadata {
     name      = "${local.app_name_safe}-syncthing-config"
@@ -108,7 +108,7 @@ resource "kubernetes_persistent_volume_claim" "syncthing_config" {
   }
 }
 
-resource "kubernetes_persistent_volume_claim" "foundry_app" {
+resource "kubernetes_persistent_volume_claim" "app" {
   depends_on = [kubernetes_namespace.i]
   metadata {
     name      = "${local.app_name_safe}-app"

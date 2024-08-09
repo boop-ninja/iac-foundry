@@ -5,7 +5,7 @@ locals {
 
   volume_mounts = [
     {
-      name       = "foundry-app"
+      name       = "app"
       mount_path = "/foundryvtt"
       sub_path   = ""
     },
@@ -80,7 +80,7 @@ resource "kubernetes_deployment" "i" {
           ]
 
           volume_mount {
-            name       = "syncthing-config"
+            name       = "syncthing"
             mount_path = "/var/syncthing/config"
             sub_path   = "syncthing-config"
           }
@@ -153,8 +153,8 @@ resource "kubernetes_deployment" "i" {
             }
 
             volume_mount {
-              name       = "syncthing-config"
-              sub_path   = "syncthing-config"
+              name       = "syncthing"
+              sub_path   = "syncthing"
               mount_path = "/var/syncthing/config"
             }
 
@@ -176,9 +176,9 @@ resource "kubernetes_deployment" "i" {
         }
 
         volume {
-          name = "syncthing-config"
+          name = "syncthing"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.syncthing_config.metadata[0].name
+            claim_name = kubernetes_persistent_volume_claim.syncthing.metadata[0].name
           }
         }
 
