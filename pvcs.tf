@@ -91,9 +91,10 @@ resource "kubernetes_persistent_volume_claim" "moradin" {
 }
 
 resource "kubernetes_persistent_volume_claim" "syncthing" {
+  count      = var.foundry_modules.syncthing ? 1 : 0
   depends_on = [kubernetes_namespace.i]
   metadata {
-    name      = "${local.app_name_safe}-syncthing-config"
+    name      = "${local.app_name_safe}-syncthing"
     namespace = local.namespace
     labels    = local.common_labels
   }
@@ -102,7 +103,7 @@ resource "kubernetes_persistent_volume_claim" "syncthing" {
     access_modes       = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = var.pvc_storage_sizes["syncthing_config"]
+        storage = var.pvc_storage_sizes["syncthing"]
       }
     }
   }
@@ -120,7 +121,7 @@ resource "kubernetes_persistent_volume_claim" "app" {
     access_modes       = ["ReadWriteOnce"]
     resources {
       requests = {
-        storage = var.pvc_storage_sizes["foundry_app"]
+        storage = var.pvc_storage_sizes["app"]
       }
     }
   }

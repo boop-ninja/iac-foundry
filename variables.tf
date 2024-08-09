@@ -58,13 +58,13 @@ variable "pvc_storage_sizes" {
   description = "Storage sizes for PVCs"
   type        = map(string)
   default = {
-    backups          = "10Gi"
-    config           = "1Gi"
-    data             = "20Gi"
-    core             = "2Gi"
-    moradin          = "1Gi"
-    syncthing_config = "500Mi"
-    foundry_app      = "4Gi"
+    backups   = "10Gi"
+    config    = "1Gi"
+    data      = "20Gi"
+    core      = "2Gi"
+    moradin   = "1Gi"
+    syncthing = "500Mi"
+    app       = "4Gi"
   }
 }
 
